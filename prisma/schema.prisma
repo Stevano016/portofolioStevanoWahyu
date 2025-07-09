@@ -1,0 +1,49 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Message {
+  id        Int      @id @default(autoincrement())
+  name      String
+  email     String
+  message   String   @db.Text
+  createdAt DateTime @default(now())
+  
+  @@map("messages")
+}
+
+model Project {
+  id          Int      @id @default(autoincrement())
+  title       String
+  description String   @db.Text
+  image       String
+  techStack   String   @db.Text // JSON string of tech stack array
+  githubUrl   String?
+  demoUrl     String?
+  featured    Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  
+  @@map("projects")
+}
+
+model BlogPost {
+  id          Int      @id @default(autoincrement())
+  title       String
+  slug        String   @unique
+  excerpt     String   @db.Text
+  content     String   @db.LongText
+  image       String?
+  published   Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  @@map("blog_posts")
+}
