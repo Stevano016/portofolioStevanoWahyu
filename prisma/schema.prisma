@@ -34,16 +34,33 @@ model Project {
   @@map("projects")
 }
 
-model BlogPost {
-  id          Int      @id @default(autoincrement())
-  title       String
-  slug        String   @unique
-  excerpt     String   @db.Text
-  content     String   @db.LongText
-  image       String?
-  published   Boolean  @default(false)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+model Research {
+  id              Int      @id @default(autoincrement())
+  title           String
+  slug            String   @unique
+  excerpt         String   @db.Text
+  content         String   @db.LongText
+  image           String?
+  published       Boolean  @default(false)
+  type            ResearchType @default(JOURNAL)
+  authors         String?  @db.Text
+  publicationYear Int?     @map("publication_year")
+  journalName     String?  @map("journal_name")
+  doi             String?
+  pdfUrl          String?  @map("pdf_url")
+  externalUrl     String?  @map("external_url")
+  keywords        String?  @db.Text
+  abstract        String?  @db.Text
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
   
-  @@map("blog_posts")
+  @@map("research")
+}
+
+enum ResearchType {
+  JOURNAL     @map("journal")
+  THESIS      @map("thesis")
+  CONFERENCE  @map("conference")
+  BOOK        @map("book")
+  OTHER       @map("other")
 }

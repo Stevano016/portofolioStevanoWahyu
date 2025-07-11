@@ -4,7 +4,7 @@ import { AboutSection } from "@/components/sections/about"
 import { SkillsSection } from "@/components/sections/skills"
 import { ProjectsSection } from "@/components/sections/projects"
 import { TestimonialsSection } from "@/components/sections/testimonials"
-import { BlogSection } from "@/components/sections/blog"
+import { ResearchSection } from "@/components/sections/research"
 import { ContactSection } from "@/components/sections/contact"
 
 export default function Home() {
@@ -16,8 +16,8 @@ export default function Home() {
         <AboutSection />
         <SkillsSection />
         <ProjectsSection />
-        {/* <TestimonialsSection /> */}
-        <BlogSection />
+        <TestimonialsSection />
+        <ResearchSection />
         <ContactSection />
       </main>
     </div>

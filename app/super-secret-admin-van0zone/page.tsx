@@ -9,7 +9,8 @@ import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Badge } from "@/components/ui/badge"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Plus, Edit, Trash2, Save, X, Mail, MessageSquare, Shield, Lock } from "lucide-react"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { Plus, Edit, Trash2, Save, X, Mail, MessageSquare, Shield, Lock, BookOpen, FileText, Award } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
 import Link from "next/link"
 
@@ -24,7 +25,7 @@ interface Project {
   featured: boolean
 }
 
-interface BlogPost {
+interface Research {
   id: number
   title: string
   slug: string
@@ -32,6 +33,15 @@ interface BlogPost {
   content: string
   image?: string
   published: boolean
+  type: string
+  authors?: string
+  publicationYear?: number
+  journalName?: string
+  doi?: string
+  pdfUrl?: string
+  externalUrl?: string
+  keywords?: string
+  abstract?: string
   createdAt: string
 }
 
@@ -43,20 +53,28 @@ interface Message {
   createdAt: string
 }
 
+const researchTypes = [
+  { value: "JOURNAL", label: "Journal", icon: BookOpen },
+  { value: "THESIS", label: "Thesis", icon: FileText },
+  { value: "CONFERENCE", label: "Conference", icon: Award },
+  { value: "BOOK", label: "Book", icon: BookOpen },
+  { value: "OTHER", label: "Other", icon: FileText },
+]
+
 export default function AdminPage() {
   const [projects, setProjects] = useState<Project[]>([])
-  const [blogPosts, setBlogPosts] = useState<BlogPost[]>([])
+  const [research, setResearch] = useState<Research[]>([])
   const [messages, setMessages] = useState<Message[]>([])
   const [editingProject, setEditingProject] = useState<Project | null>(null)
-  const [editingBlog, setEditingBlog] = useState<BlogPost | null>(null)
+  const [editingResearch, setEditingResearch] = useState<Research | null>(null)
   const [isAddingProject, setIsAddingProject] = useState(false)
-  const [isAddingBlog, setIsAddingBlog] = useState(false)
+  const [isAddingResearch, setIsAddingResearch] = useState(false)
   const { toast } = useToast()
 
   // Fetch data
   useEffect(() => {
     fetchProjects()
-    fetchBlogPosts()
+    fetchResearch()
     fetchMessages()
   }, [])
 
@@ -70,13 +88,13 @@ export default function AdminPage() {
     }
   }
 
-  const fetchBlogPosts = async () => {
+  const fetchResearch = async () => {
     try {
-      const response = await fetch("/api/blog")
+      const response = await fetch("/api/research")
       const data = await response.json()
-      setBlogPosts(data)
+      setResearch(data)
     } catch (error) {
-      console.error("Failed to fetch blog posts:", error)
+      console.error("Failed to fetch research:", error)
     }
   }
 
@@ -129,42 +147,42 @@ export default function AdminPage() {
     }
   }
 
-  // Blog functions
-  const saveBlogPost = async (post: Omit<BlogPost, "id" | "createdAt"> | BlogPost) => {
+  // Research functions
+  const saveResearch = async (researchItem: Omit<Research, "id" | "createdAt"> | Research) => {
     try {
-      const method = "id" in post ? "PUT" : "POST"
-      const url = "id" in post ? `/api/blog/admin/${post.id}` : "/api/blog"
+      const method = "id" in researchItem ? "PUT" : "POST"
+      const url = "id" in researchItem ? `/api/research/admin/${researchItem.id}` : "/api/research"
 
       const response = await fetch(url, {
         method,
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(post),
+        body: JSON.stringify(researchItem),
       })
 
       if (response.ok) {
-        toast({ title: "Success", description: "Blog post saved successfully!" })
-        fetchBlogPosts()
-        setEditingBlog(null)
-        setIsAddingBlog(false)
+        toast({ title: "Success", description: "Research saved successfully!" })
+        fetchResearch()
+        setEditingResearch(null)
+        setIsAddingResearch(false)
       } else {
-        throw new Error("Failed to save blog post")
+        throw new Error("Failed to save research")
       }
     } catch (error) {
-      toast({ title: "Error", description: "Failed to save blog post", variant: "destructive" })
+      toast({ title: "Error", description: "Failed to save research", variant: "destructive" })
     }
   }
 
-  const deleteBlogPost = async (id: number) => {
-    if (!confirm("Are you sure you want to delete this blog post?")) return
+  const deleteResearch = async (id: number) => {
+    if (!confirm("Are you sure you want to delete this research?")) return
 
     try {
-      const response = await fetch(`/api/blog/admin/${id}`, { method: "DELETE" })
+      const response = await fetch(`/api/research/admin/${id}`, { method: "DELETE" })
       if (response.ok) {
-        toast({ title: "Success", description: "Blog post deleted successfully!" })
-        fetchBlogPosts()
+        toast({ title: "Success", description: "Research deleted successfully!" })
+        fetchResearch()
       }
     } catch (error) {
-      toast({ title: "Error", description: "Failed to delete blog post", variant: "destructive" })
+      toast({ title: "Error", description: "Failed to delete research", variant: "destructive" })
     }
   }
 
@@ -180,7 +198,7 @@ export default function AdminPage() {
             </div>
           </div>
           <h1 className="text-4xl font-bold mb-2">🔐 Super Secret Admin Dashboard</h1>
-          <p className="text-muted-foreground">Manage your projects, blog posts, and messages</p>
+          <p className="text-muted-foreground">Manage your projects, research, and messages</p>
           <div className="mt-4 p-4 bg-amber-500/10 border border-amber-500/20 rounded-lg">
             <p className="text-sm text-amber-700 dark:text-amber-400">
               <strong>⚠️ Security Notice:</strong> This is a protected admin area. Keep this URL confidential.
@@ -208,11 +226,11 @@ export default function AdminPage() {
             <CardContent className="p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-medium text-muted-foreground">Blog Posts</p>
-                  <p className="text-2xl font-bold">{blogPosts.length}</p>
+                  <p className="text-sm font-medium text-muted-foreground">Research</p>
+                  <p className="text-2xl font-bold">{research.length}</p>
                 </div>
                 <div className="h-8 w-8 bg-green-500/10 rounded-full flex items-center justify-center">
-                  <div className="h-4 w-4 bg-green-500 rounded-full" />
+                  <BookOpen className="h-4 w-4 text-green-500" />
                 </div>
               </div>
             </CardContent>
@@ -247,7 +265,7 @@ export default function AdminPage() {
         <Tabs defaultValue="projects" className="space-y-6">
           <TabsList>
             <TabsTrigger value="projects">Projects</TabsTrigger>
-            <TabsTrigger value="blog">Blog Posts</TabsTrigger>
+            <TabsTrigger value="research">Research</TabsTrigger>
             <TabsTrigger value="messages">Recent Messages</TabsTrigger>
           </TabsList>
 
@@ -302,44 +320,96 @@ export default function AdminPage() {
             )}
           </TabsContent>
 
-          <TabsContent value="blog" className="space-y-6">
+          <TabsContent value="research" className="space-y-6">
             <div className="flex justify-between items-center">
-              <h2 className="text-2xl font-bold">Blog Posts</h2>
-              <Button onClick={() => setIsAddingBlog(true)}>
+              <h2 className="text-2xl font-bold">Research & Publications</h2>
+              <Button onClick={() => setIsAddingResearch(true)}>
                 <Plus className="w-4 h-4 mr-2" />
-                Add Blog Post
+                Add Research
               </Button>
             </div>
 
-            {isAddingBlog && <BlogForm onSave={saveBlogPost} onCancel={() => setIsAddingBlog(false)} />}
+            {isAddingResearch && <ResearchForm onSave={saveResearch} onCancel={() => setIsAddingResearch(false)} />}
 
             <div className="grid gap-6">
-              {blogPosts.map((post) => (
-                <Card key={post.id}>
-                  <CardHeader>
-                    <div className="flex justify-between items-start">
-                      <div>
-                        <CardTitle className="flex items-center gap-2">
-                          {post.title}
-                          {post.published && <Badge>Published</Badge>}
-                        </CardTitle>
-                        <p className="text-muted-foreground mt-2">{post.excerpt}</p>
+              {research.map((item) => {
+                const typeConfig = researchTypes.find((t) => t.value === item.type) || researchTypes[0]
+                const TypeIcon = typeConfig.icon
+                return (
+                  <Card key={item.id}>
+                    <CardHeader>
+                      <div className="flex justify-between items-start">
+                        <div>
+                          <CardTitle className="flex items-center gap-2">
+                            <TypeIcon className="w-5 h-5" />
+                            {item.title}
+                            {item.published && <Badge>Published</Badge>}
+                            <Badge variant="outline">{typeConfig.label}</Badge>
+                          </CardTitle>
+                          <p className="text-muted-foreground mt-2">{item.abstract || item.excerpt}</p>
+                          {item.authors && (
+                            <p className="text-sm text-muted-foreground mt-1">
+                              <strong>Authors:</strong> {item.authors}
+                            </p>
+                          )}
+                          {item.journalName && (
+                            <p className="text-sm text-primary mt-1">
+                              <strong>Published in:</strong> {item.journalName}
+                            </p>
+                          )}
+                        </div>
+                        <div className="flex gap-2">
+                          <Button variant="outline" size="sm" onClick={() => setEditingResearch(item)}>
+                            <Edit className="w-4 h-4" />
+                          </Button>
+                          <Button variant="destructive" size="sm" onClick={() => deleteResearch(item.id)}>
+                            <Trash2 className="w-4 h-4" />
+                          </Button>
+                        </div>
                       </div>
-                      <div className="flex gap-2">
-                        <Button variant="outline" size="sm" onClick={() => setEditingBlog(post)}>
-                          <Edit className="w-4 h-4" />
-                        </Button>
-                        <Button variant="destructive" size="sm" onClick={() => deleteBlogPost(post.id)}>
-                          <Trash2 className="w-4 h-4" />
-                        </Button>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="flex flex-wrap gap-2">
+                        {item.keywords &&
+                          item.keywords
+                            .split(",")
+                            .slice(0, 5)
+                            .map((keyword, idx) => (
+                              <Badge key={idx} variant="secondary">
+                                {keyword.trim()}
+                              </Badge>
+                            ))}
                       </div>
-                    </div>
-                  </CardHeader>
-                </Card>
-              ))}
+                      <div className="mt-3 flex gap-2">
+                        {item.pdfUrl && (
+                          <Badge variant="outline" className="text-xs">
+                            PDF Available
+                          </Badge>
+                        )}
+                        {item.externalUrl && (
+                          <Badge variant="outline" className="text-xs">
+                            External Link
+                          </Badge>
+                        )}
+                        {item.doi && (
+                          <Badge variant="outline" className="text-xs">
+                            DOI: {item.doi}
+                          </Badge>
+                        )}
+                      </div>
+                    </CardContent>
+                  </Card>
+                )
+              })}
             </div>
 
-            {editingBlog && <BlogForm post={editingBlog} onSave={saveBlogPost} onCancel={() => setEditingBlog(null)} />}
+            {editingResearch && (
+              <ResearchForm
+                research={editingResearch}
+                onSave={saveResearch}
+                onCancel={() => setEditingResearch(null)}
+              />
+            )}
           </TabsContent>
 
           <TabsContent value="messages" className="space-y-6">
@@ -485,23 +555,32 @@ function ProjectForm({
   )
 }
 
-// Blog Form Component
-function BlogForm({
-  post,
+// Research Form Component
+function ResearchForm({
+  research,
   onSave,
   onCancel,
 }: {
-  post?: BlogPost
-  onSave: (post: any) => void
+  research?: Research
+  onSave: (research: any) => void
   onCancel: () => void
 }) {
   const [formData, setFormData] = useState({
-    title: post?.title || "",
-    slug: post?.slug || "",
-    excerpt: post?.excerpt || "",
-    content: post?.content || "",
-    image: post?.image || "",
-    published: post?.published || false,
+    title: research?.title || "",
+    slug: research?.slug || "",
+    excerpt: research?.excerpt || "",
+    content: research?.content || "",
+    image: research?.image || "",
+    published: research?.published || false,
+    type: research?.type || "JOURNAL",
+    authors: research?.authors || "",
+    publicationYear: research?.publicationYear || new Date().getFullYear(),
+    journalName: research?.journalName || "",
+    doi: research?.doi || "",
+    pdfUrl: research?.pdfUrl || "",
+    externalUrl: research?.externalUrl || "",
+    keywords: research?.keywords || "",
+    abstract: research?.abstract || "",
   })
 
   const generateSlug = (title: string) => {
@@ -515,14 +594,14 @@ function BlogForm({
     setFormData({
       ...formData,
       title,
-      slug: post ? formData.slug : generateSlug(title),
+      slug: research ? formData.slug : generateSlug(title),
     })
   }
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     onSave({
-      ...post,
+      ...research,
       ...formData,
     })
   }
@@ -530,40 +609,115 @@ function BlogForm({
   return (
     <Card>
       <CardHeader>
-        <CardTitle>{post ? "Edit Blog Post" : "Add New Blog Post"}</CardTitle>
+        <CardTitle>{research ? "Edit Research" : "Add New Research"}</CardTitle>
       </CardHeader>
       <CardContent>
         <form onSubmit={handleSubmit} className="space-y-4">
+          <div className="grid md:grid-cols-2 gap-4">
+            <Input
+              placeholder="Research Title"
+              value={formData.title}
+              onChange={(e) => handleTitleChange(e.target.value)}
+              required
+            />
+            <Input
+              placeholder="Slug"
+              value={formData.slug}
+              onChange={(e) => setFormData({ ...formData, slug: e.target.value })}
+              required
+            />
+          </div>
+
+          <div className="grid md:grid-cols-2 gap-4">
+            <Select value={formData.type} onValueChange={(value) => setFormData({ ...formData, type: value })}>
+              <SelectTrigger>
+                <SelectValue placeholder="Select research type" />
+              </SelectTrigger>
+              <SelectContent>
+                {researchTypes.map((type) => (
+                  <SelectItem key={type.value} value={type.value}>
+                    <div className="flex items-center gap-2">
+                      <type.icon className="w-4 h-4" />
+                      {type.label}
+                    </div>
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            <Input
+              placeholder="Publication Year"
+              type="number"
+              value={formData.publicationYear}
+              onChange={(e) => setFormData({ ...formData, publicationYear: Number(e.target.value) })}
+            />
+          </div>
+
           <Input
-            placeholder="Blog Title"
-            value={formData.title}
-            onChange={(e) => handleTitleChange(e.target.value)}
-            required
+            placeholder="Authors (comma separated)"
+            value={formData.authors}
+            onChange={(e) => setFormData({ ...formData, authors: e.target.value })}
           />
+
           <Input
-            placeholder="Slug"
-            value={formData.slug}
-            onChange={(e) => setFormData({ ...formData, slug: e.target.value })}
-            required
+            placeholder="Journal/Conference Name"
+            value={formData.journalName}
+            onChange={(e) => setFormData({ ...formData, journalName: e.target.value })}
           />
+
+          <Textarea
+            placeholder="Abstract"
+            value={formData.abstract}
+            onChange={(e) => setFormData({ ...formData, abstract: e.target.value })}
+            rows={3}
+          />
+
           <Textarea
             placeholder="Excerpt"
             value={formData.excerpt}
             onChange={(e) => setFormData({ ...formData, excerpt: e.target.value })}
             required
           />
+
           <Textarea
             placeholder="Content (Markdown supported)"
             value={formData.content}
             onChange={(e) => setFormData({ ...formData, content: e.target.value })}
-            rows={10}
+            rows={8}
             required
           />
+
           <Input
             placeholder="Image URL (optional)"
             value={formData.image}
             onChange={(e) => setFormData({ ...formData, image: e.target.value })}
           />
+
+          <div className="grid md:grid-cols-2 gap-4">
+            <Input
+              placeholder="PDF URL (optional)"
+              value={formData.pdfUrl}
+              onChange={(e) => setFormData({ ...formData, pdfUrl: e.target.value })}
+            />
+            <Input
+              placeholder="External URL (optional)"
+              value={formData.externalUrl}
+              onChange={(e) => setFormData({ ...formData, externalUrl: e.target.value })}
+            />
+          </div>
+
+          <div className="grid md:grid-cols-2 gap-4">
+            <Input
+              placeholder="DOI (optional)"
+              value={formData.doi}
+              onChange={(e) => setFormData({ ...formData, doi: e.target.value })}
+            />
+            <Input
+              placeholder="Keywords (comma separated)"
+              value={formData.keywords}
+              onChange={(e) => setFormData({ ...formData, keywords: e.target.value })}
+            />
+          </div>
+
           <label className="flex items-center space-x-2">
             <input
               type="checkbox"
@@ -572,6 +726,7 @@ function BlogForm({
             />
             <span>Published</span>
           </label>
+
           <div className="flex gap-2">
             <Button type="submit">
               <Save className="w-4 h-4 mr-2" />
