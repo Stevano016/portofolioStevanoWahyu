@@ -97,7 +97,7 @@ export function BlogSection() {
         >
           <h2 className="text-3xl md:text-4xl font-bold mb-4">Latest Blog Posts</h2>
           <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
-            Sharing insights, tutorials, and thoughts about web development and technology.
+            Berbagi wawasan, tutorial, dan pemikiran seputar pengembangan web dan teknologi.
           </p>
         </motion.div>
 

@@ -13,7 +13,7 @@ const navigation = [
   { name: "About", href: "#about", icon: User },
   { name: "Skills", href: "#skills", icon: Code },
   { name: "Projects", href: "#projects", icon: FolderOpen },
-  { name: "Testimonials", href: "#testimonials", icon: MessageSquare },
+  // { name: "Kata Mereka", href: "#testimonials", icon: MessageSquare },
   { name: "Blog", href: "#blog", icon: BookOpen },
   { name: "Contact", href: "#contact", icon: Mail },
 ]
@@ -47,7 +47,7 @@ export function Sidebar() {
         <div className="flex flex-col flex-1 min-h-0 bg-background border-r border-border">
           <div className="flex flex-col flex-1 pt-8 pb-4 overflow-y-auto">
             <div className="flex items-center flex-shrink-0 px-6 mb-8">
-              <div className="text-xl font-bold">Stevano</div>
+              <div className="text-xl font-bold">Hallo Guys</div>
             </div>
             <nav className="flex-1 px-4 space-y-2">
               {navigation.map((item) => {

@@ -1,20 +1,21 @@
-"use client"
+"use client";
 
-import { motion } from "framer-motion"
-import { Calendar, MapPin, Code, Coffee } from "lucide-react"
-import { Card, CardContent } from "@/components/ui/card"
-import Image from "next/image"
-import { useState } from "react"
+import { motion } from "framer-motion";
+import { Calendar, MapPin, Code, Coffee } from "lucide-react";
+import { Card, CardContent } from "@/components/ui/card";
+import Image from "next/image";
+import { useState } from "react";
 
 export function AboutSection() {
-  const [imageError, setImageError] = useState(false)
+  const [imageError, setImageError] = useState(false);
 
+  // Statistik yang ingin ditampilkan
   const stats = [
     { icon: Code, label: "Projects Completed", value: "50+" },
     { icon: Coffee, label: "Cups of Coffee", value: "1000+" },
-    { icon: Calendar, label: "Years Experience", value: "3+" },
+    { icon: Calendar, label: "Years Experience", value: "1+" },
     { icon: MapPin, label: "Based in", value: "Indonesia" },
-  ]
+  ];
 
   return (
     <section id="about" className="py-20 px-4">
@@ -28,7 +29,8 @@ export function AboutSection() {
         >
           <h2 className="text-3xl md:text-4xl font-bold mb-4">About Me</h2>
           <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
-            Get to know more about my journey, experience, and what drives me as a developer.
+            Kenali lebih jauh tentang perjalanan saya, pengalaman saya, dan apa
+            yang mendorong saya menjadi seorang developer.
           </p>
         </motion.div>
 
@@ -53,7 +55,9 @@ export function AboutSection() {
                 ) : (
                   <div className="w-full h-full bg-gradient-to-br from-primary/10 to-primary/30 flex items-center justify-center">
                     <div className="text-center">
-                      <div className="text-6xl font-bold text-primary mb-4">SW</div>
+                      <div className="text-6xl font-bold text-primary mb-4">
+                        SW
+                      </div>
                       <p className="text-muted-foreground">Photo coming soon</p>
                     </div>
                   </div>
@@ -76,17 +80,20 @@ export function AboutSection() {
               <h3 className="text-2xl font-bold mb-4">Hello, I'm Stevano!</h3>
               <div className="space-y-4 text-muted-foreground">
                 <p>
-                  I'm a passionate full-stack developer with over 3 years of experience creating digital solutions that
-                  make a difference. My journey in web development started with curiosity and has evolved into a deep
-                  love for crafting exceptional user experiences.
+                  Halo! Aku Stevano, mahasiswa Informatika di Universitas Sugeng
+                  Hartono dan udah ngoding-ngoding selama kurang lebih 1 tahun
+                  terakhir sebagai software developer.
                 </p>
                 <p>
-                  I specialize in modern web technologies including React, Next.js, Node.js, and various databases. I
-                  believe in writing clean, maintainable code and staying up-to-date with the latest industry trends.
+                  Aku punya ketertarikan besar sama dunia pendidikan, terutama
+                  gimana teknologi kayak AI bisa nyatu bareng kreativitas
+                  manusia buat bikin pengalaman belajar yang lebih keren dan
+                  manusiawi.
                 </p>
                 <p>
-                  When I'm not coding, you can find me exploring new technologies, contributing to open-source projects,
-                  or sharing knowledge with the developer community through my blog.
+                  Visi ke depanku adalah ikut ambil peran di era Industri 5.0,
+                  di mana manusia dan teknologi bisa saling dukung, bukan saling
+                  gantiin.
                 </p>
               </div>
             </div>
@@ -104,7 +111,9 @@ export function AboutSection() {
                     <CardContent className="p-4 text-center">
                       <stat.icon className="w-8 h-8 mx-auto mb-2 text-primary" />
                       <div className="text-2xl font-bold">{stat.value}</div>
-                      <div className="text-sm text-muted-foreground">{stat.label}</div>
+                      <div className="text-sm text-muted-foreground">
+                        {stat.label}
+                      </div>
                     </CardContent>
                   </Card>
                 </motion.div>
@@ -114,5 +123,5 @@ export function AboutSection() {
         </div>
       </div>
     </section>
-  )
+  );
 }

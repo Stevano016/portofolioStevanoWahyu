@@ -1,47 +1,58 @@
-"use client"
+"use client";
 
-import { motion } from "framer-motion"
-import { Download, Mail, Github, Linkedin, Twitter, Eye, Instagram, Facebook, Youtube, Globe } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import Image from "next/image"
-import { useState } from "react"
-import Link from "next/link"
+import { motion } from "framer-motion";
+import {
+  Download,
+  Mail,
+  Github,
+  Linkedin,
+  Twitter,
+  Eye,
+  Instagram,
+  Facebook,
+  Youtube,
+  Globe,
+} from "lucide-react";
+import { Button } from "@/components/ui/button";
+import Image from "next/image";
+import { useState } from "react";
+import Link from "next/link";
 
 export function HeroSection() {
-  const [imageError, setImageError] = useState(false)
-  const [cvDownloading, setCvDownloading] = useState(false)
+  const [imageError, setImageError] = useState(false);
+  const [cvDownloading, setCvDownloading] = useState(false);
 
   const handleHireMe = () => {
-    const element = document.querySelector("#contact")
-    element?.scrollIntoView({ behavior: "smooth" })
-  }
+    const element = document.querySelector("#contact");
+    element?.scrollIntoView({ behavior: "smooth" });
+  };
 
   const handleDownloadCV = async () => {
-    setCvDownloading(true)
+    setCvDownloading(true);
     try {
       // Check if CV file exists
-      const response = await fetch("/cv/CV-Stevano-Wahyu-Alfandi.pdf")
+      const response = await fetch("/cv/CV-Stevano-Wahyu-Alfandi.pdf");
       if (response.ok) {
         // Create download link
-        const link = document.createElement("a")
-        link.href = "/cv/CV-Stevano-Wahyu-Alfandi.pdf"
-        link.download = "CV-Stevano-Wahyu-Alfandi.pdf"
-        link.target = "_blank"
-        document.body.appendChild(link)
-        link.click()
-        document.body.removeChild(link)
+        const link = document.createElement("a");
+        link.href = "/cv/CV-Stevano-Wahyu-Alfandi.pdf";
+        link.download = "CV-Stevano-Wahyu-Alfandi.pdf";
+        link.target = "_blank";
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
       } else {
         // Fallback: redirect to CV page
-        window.location.href = "/cv"
+        window.location.href = "/cv";
       }
     } catch (error) {
-      console.error("Error downloading CV:", error)
+      console.error("Error downloading CV:", error);
       // Fallback: redirect to CV page
-      window.location.href = "/cv"
+      window.location.href = "/cv";
     } finally {
-      setCvDownloading(false)
+      setCvDownloading(false);
     }
-  }
+  };
 
   // 🔗 KONFIGURASI SOCIAL MEDIA - GANTI URL DI SINI
   const socialLinks = [
@@ -94,10 +105,10 @@ export function HeroSection() {
       color: "hover:text-green-500",
       show: false, // 👈 SET true UNTUK MENAMPILKAN
     },
-  ]
+  ];
 
   // Filter hanya social media yang ingin ditampilkan
-  const visibleSocialLinks = socialLinks.filter((link) => link.show)
+  const visibleSocialLinks = socialLinks.filter((link) => link.show);
 
   return (
     <section
@@ -114,7 +125,7 @@ export function HeroSection() {
           <div className="relative w-40 h-40 mx-auto mb-8 rounded-full overflow-hidden ring-4 ring-primary/20 shadow-2xl">
             {!imageError ? (
               <Image
-                src="/images/Homs.png"
+                src="/images/profile.png"
                 alt="Stevano Wahyu Al'fandi"
                 fill
                 className="object-cover"
@@ -137,10 +148,15 @@ export function HeroSection() {
             <h1 className="text-5xl md:text-7xl font-bold mb-6 bg-gradient-to-r from-primary via-purple-500 to-primary bg-clip-text text-transparent">
               Stevano Wahyu Al'fandi
             </h1>
-            <div className="text-2xl md:text-3xl text-muted-foreground mb-6 font-medium">Full-Stack Developer</div>
+            <div className="text-2xl md:text-3xl text-muted-foreground mb-6 font-medium">
+              Full-Stack Developer
+            </div>
             <p className="text-lg md:text-xl text-muted-foreground max-w-3xl mx-auto mb-8 leading-relaxed">
-              Passionate about creating exceptional digital experiences through clean code, innovative solutions, and
-              cutting-edge technologies. Specialized in React, Next.js, Node.js, and modern web development.
+              Hai! Aku Stevano, orang di balik kode-kode dan desain yang kamu
+              lihat di sini. Aku suka bikin hal yang simpel tapi impactfull
+              entah itu web apps, tampilan UI kece, atau backend yang ngebut.
+              Portofolio ini adalah kumpulan karya yang aku banggakan. Kalau
+              kamu suka apa yang kamu lihat, yuk ngobrol atau kolaborasi!
             </p>
           </motion.div>
         </motion.div>
@@ -166,7 +182,9 @@ export function HeroSection() {
             disabled={cvDownloading}
             className="text-lg px-8 py-6 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 border-2 hover:bg-primary/5 bg-transparent"
           >
-            <Download className={`mr-2 h-5 w-5 ${cvDownloading ? "animate-spin" : ""}`} />
+            <Download
+              className={`mr-2 h-5 w-5 ${cvDownloading ? "animate-spin" : ""}`}
+            />
             {cvDownloading ? "Downloading..." : "Download CV"}
           </Button>
         </motion.div>
@@ -205,7 +223,12 @@ export function HeroSection() {
                 className={`rounded-full w-12 h-12 hover:bg-primary/10 transition-all duration-300 ${social.color}`}
                 asChild
               >
-                <a href={social.url} target="_blank" rel="noopener noreferrer" title={`Follow me on ${social.name}`}>
+                <a
+                  href={social.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  title={`Follow me on ${social.name}`}
+                >
                   <social.icon className="h-6 w-6" />
                 </a>
               </Button>
@@ -223,10 +246,12 @@ export function HeroSection() {
             <div className="w-6 h-10 border-2 border-primary/50 rounded-full mx-auto relative">
               <div className="w-1 h-3 bg-primary rounded-full mx-auto mt-2 animate-pulse"></div>
             </div>
-            <p className="text-sm text-muted-foreground mt-2">Scroll to explore</p>
+            <p className="text-sm text-muted-foreground mt-2">
+              Scroll to explore
+            </p>
           </div>
         </motion.div>
       </div>
     </section>
-  )
+  );
 }

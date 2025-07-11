@@ -66,7 +66,7 @@ export function TestimonialsSection() {
           viewport={{ once: true }}
           className="text-center mb-16"
         >
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">What Clients Say</h2>
+          <h2 className="text-3xl md:text-4xl font-bold mb-4">Apa Kata Mereka?</h2>
           <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
             Don't just take my word for it. Here's what some of my clients have to say about working with me.
           </p>

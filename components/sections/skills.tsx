@@ -1,8 +1,8 @@
-"use client"
+"use client";
 
-import { motion } from "framer-motion"
-import { Badge } from "@/components/ui/badge"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { motion } from "framer-motion";
+import { Badge } from "@/components/ui/badge";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 export function SkillsSection() {
   const skillCategories = [
@@ -51,9 +51,20 @@ export function SkillsSection() {
     },
     {
       title: "Tools & Others",
-      skills: ["Git", "Docker", "AWS", "Vercel", "Figma", "Postman", "Jest", "Cypress", "Linux", "CI/CD"],
+      skills: [
+        "Git",
+        "Docker",
+        "AWS",
+        "Vercel",
+        "Figma",
+        "Postman",
+        "Jest",
+        "Cypress",
+        "Linux",
+        "CI/CD",
+      ],
     },
-  ]
+  ];
 
   return (
     <section id="skills" className="py-20 px-4 bg-muted/30">
@@ -65,9 +76,12 @@ export function SkillsSection() {
           viewport={{ once: true }}
           className="text-center mb-16"
         >
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">Skills & Technologies</h2>
+          <h2 className="text-3xl md:text-4xl font-bold mb-4">
+            Skills & Technologies
+          </h2>
           <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
-            A comprehensive overview of the technologies and tools I work with to bring ideas to life.
+            Gambaran menyeluruh tentang teknologi dan alat yang saya gunakan
+            untuk mewujudkan ide-ide menjadi kenyataan.
           </p>
         </motion.div>
 
@@ -110,5 +124,5 @@ export function SkillsSection() {
         </div>
       </div>
     </section>
-  )
+  );
 }
